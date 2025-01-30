@@ -14,4 +14,4 @@ This project is made so all the elements are displayed correctly on popular scre
 
 **GitHub Pages**
 
-- [Link to the project on GitHub Pages](https://github.com/Pfarfl/se_project_spots/deployments/github-pages)
+- [Link to the project on GitHub Pages](https://pfarfl.github.io/se_project_spots/)
