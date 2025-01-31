@@ -15,3 +15,7 @@ This project is made so all the elements are displayed correctly on popular scre
 **GitHub Pages**
 
 - [Link to the project on GitHub Pages](https://pfarfl.github.io/se_project_spots/)
+
+**Video Description**
+
+- [Link to a video showcasing the project](https://drive.google.com/file/d/1BIDrQ2ba_UuWQWOOioIMzxE3JH_LMzA4/view?usp=sharing)
