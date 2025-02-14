@@ -27,7 +27,7 @@
   border-radius: 8px;
 }
 
-.modal__close-btn {
+.modal__close-button {
   position: absolute;
   top: 32px;
   right: 50px;
@@ -38,6 +38,7 @@
   background-color: white;
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
 
 .modal__title {
@@ -86,7 +87,7 @@
   color: rgba(33, 33, 33, 0.3);
 }
 
-.modal__submit-btn {
+.modal__submit-button {
   width: 156px;
   padding: 18px 0;
   border: none;
@@ -109,7 +110,7 @@
     margin: 10px 0 34px;
   }
 
-  .modal__close-btn {
+  .modal__close-button {
     top: 12px;
     right: 12px;
   }
@@ -123,7 +124,7 @@
     line-height: 1;
   }
 
-  .modal__submit-btn {
+  .modal__submit-button {
     width: 100%;
   }
 }
