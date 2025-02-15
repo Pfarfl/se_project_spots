@@ -33,7 +33,7 @@ const initialCards = [
 const editModal = document.querySelector("#edit-profile-modal");
 const profileFormElement = editModal.querySelector(".modal__form");
 const editButton = document.querySelector(".profile__edit-button");
-const closeButton = document.querySelector(".modal__close-button");
+const editCloseButton = document.querySelector(".modal__close-button");
 
 const profileName = document.querySelector(".profile__name");
 const profileDescription = document.querySelector(".profile__description");
@@ -41,6 +41,23 @@ const editModalNameInput = document.querySelector("#profile-name-input");
 const editModalDescriptionInput = document.querySelector(
   "#profile-description-input"
 );
+
+const cardTemplate = document.querySelector("#card-template");
+const cardsList = document.querySelector(".cards__list");
+
+function getCardElement(data) {
+  const cardElement = cardTemplate.content
+    .querySelector(".card")
+    .cloneNode(true);
+
+  const cardNameElement = cardElement.querySelector(".card__title");
+  const cardImageElement = cardElement.querySelector(".card__image");
+
+  cardNameElement.textContent = data.name;
+  cardImageElement.src = data.link;
+  cardImageElement.alt = data.name;
+  return cardElement;
+}
 
 function openModal() {
   editModalNameInput.value = profileName.textContent;
@@ -52,9 +69,6 @@ function closeModal() {
   editModal.classList.remove("modal_opened");
 }
 
-editButton.addEventListener("click", openModal);
-closeButton.addEventListener("click", closeModal);
-
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = editModalNameInput.value;
@@ -62,6 +76,11 @@ function handleProfileFormSubmit(evt) {
   closeModal();
 }
 
+editButton.addEventListener("click", openModal);
+editCloseButton.addEventListener("click", closeModal);
 profileFormElement.addEventListener("submit", handleProfileFormSubmit);
 
-function getCardElement(data) {}
+for (let i = 0; i < initialCards.length; i++) {
+  const cardElement = getCardElement(initialCards[i]);
+  cardsList.prepend(cardElement);
+}
