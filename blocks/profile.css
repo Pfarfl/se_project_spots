@@ -64,7 +64,7 @@
   -webkit-box-orient: vertical;
 }
 
-.profile__add-button {
+.profile__post-button {
   padding: 0;
   margin: auto 0 0 auto;
   color: #fcf5e5;
@@ -83,7 +83,7 @@
   align-items: center;
 }
 
-.profile__add-button:hover {
+.profile__post-button:hover {
   opacity: 80%;
   cursor: pointer;
 }

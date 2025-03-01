@@ -32,7 +32,7 @@
               <img src="./images/pencil.svg" alt="Pencil icon" />Edit Profile
             </button>
           </div>
-          <button type="button" class="profile__add-button">
+          <button type="button" class="profile__post-button">
             <img src="./images/plus_symbol.svg" alt="plus icon" />New Post
           </button>
         </section>
@@ -41,6 +41,7 @@
             <template id="card-template">
               <li class="card">
                 <img alt="" src="" class="card__image" />
+                <button type="button" class="card__delete-button"></button>
                 <div class="card__content">
                   <h2 class="card__title"></h2>
                   <button type="button" class="card__like-button"></button>
@@ -74,6 +75,35 @@
                 type="text"
                 class="modal__input"
                 placeholder="Describe yourself"
+              />
+            </label>
+            <button type="submit" class="modal__submit-button">Save</button>
+          </form>
+        </div>
+      </div>
+      <div class="modal" id="add-post-modal">
+        <div class="modal__container">
+          <button type="button" class="modal__close-button"></button>
+          <h2 class="modal__title">New Post</h2>
+          <form name="add-post" id="modal__form" class="modal__form">
+            <label for="post-link-input" class="modal__label">
+              Image link
+              <input
+                id="post-link-input"
+                type="url"
+                name="link"
+                class="modal__input"
+                placeholder="Paste a link to the picture"
+              />
+            </label>
+            <label for="post-caption-input" class="modal__label">
+              Caption
+              <input
+                id="post-caption-input"
+                type="text"
+                name="caption"
+                class="modal__input"
+                placeholder="Type your caption"
               />
             </label>
             <button type="submit" class="modal__submit-button">Save</button>
