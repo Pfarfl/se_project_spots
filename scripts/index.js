@@ -31,7 +31,7 @@ const initialCards = [
 ];
 
 const editModal = document.querySelector("#edit-profile-modal");
-const profileFormElement = document.forms["modal__form"];
+const profileFormElement = editModal.querySelector(".modal__form");
 const editButton = document.querySelector(".profile__edit-button");
 const editCloseButton = document.querySelector(".modal__close-button");
 
@@ -113,6 +113,7 @@ function handleAddPostSubmit(evt) {
   const cardElement = getCardElement(inputValues);
   cardsList.prepend(cardElement);
   closeModal(postModal);
+  evt.target.reset();
 }
 
 editButton.addEventListener("click", () => {

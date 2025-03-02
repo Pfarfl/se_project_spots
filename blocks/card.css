@@ -20,11 +20,13 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  cursor: pointer;
 }
 
 .card__delete-button:hover {
   background-image: url(../images/delete_hover.svg);
   opacity: 1;
+  cursor: pointer;
 }
 
 .card__content {
@@ -48,6 +50,7 @@
 
 .card__like-button {
   background-image: url(../images/heart.svg);
+  background-repeat: no-repeat;
   padding: 0;
   width: 23px;
   height: 20px;
@@ -64,6 +67,7 @@
 .card__like-button_liked {
   background-image: url(../images/liked.svg);
   opacity: 1;
+  background-repeat: no-repeat;
 }
 
 .card__like-button_liked:hover {
