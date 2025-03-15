@@ -141,6 +141,16 @@
   color: rgba(33, 33, 33, 0.3);
 }
 
+.modal__input_type_error {
+  border-color: rgba(255, 0, 0, 0.6);
+}
+
+.modal__input-error {
+  display: block;
+  color: rgba(255, 0, 0, 0.7);
+  line-height: 1.1;
+}
+
 .modal__submit-button {
   width: 156px;
   padding: 18px 0;
@@ -148,6 +158,10 @@
   background-color: #212121;
   border-radius: 8px;
   color: #fff;
+}
+
+.modal__submit-button_type_disabled {
+  opacity: 0.5;
 }
 
 .modal__submit-button:hover {

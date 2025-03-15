@@ -37,6 +37,7 @@ const editCloseButton = document.querySelector(".modal__close-button");
 
 const postModal = document.querySelector("#add-post-modal");
 const postForm = postModal.querySelector(".modal__form");
+const postSubmitButton = postModal.querySelector(".modal__submit-button");
 const postButton = document.querySelector(".profile__post-button");
 const postCloseButton = postModal.querySelector(".modal__close-button");
 const postLinkInput = postModal.querySelector("#post-link-input");
@@ -91,10 +92,16 @@ function getCardElement(data) {
 
 function openModal(modal) {
   modal.classList.add("modal_opened");
+  document.addEventListener("keydown", handleEsc);
 }
 
 function closeModal(modal) {
   modal.classList.remove("modal_opened");
+}
+
+function handleEsc(evt) {
+  if (evt.target === "Escape") {
+  }
 }
 
 function handleProfileFormSubmit(evt) {
@@ -113,12 +120,18 @@ function handleAddPostSubmit(evt) {
   const cardElement = getCardElement(inputValues);
   cardsList.prepend(cardElement);
   closeModal(postModal);
+  disableButton(postSubmitButton, settings);
   evt.target.reset();
 }
 
 editButton.addEventListener("click", () => {
   editModalNameInput.value = profileName.textContent;
   editModalDescriptionInput.value = profileDescription.textContent;
+  resetValidation(
+    profileFormElement,
+    [editModalNameInput, editModalDescriptionInput],
+    settings
+  );
   openModal(editModal);
 });
 
