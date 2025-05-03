@@ -1,3 +1,16 @@
+import "./index.css";
+import {
+  enableValidation,
+  settings,
+  disableButton,
+  resetValidation,
+} from "../scripts/validation.js";
+
+import avatar from "../images/avatar.jpg";
+import plus from "../images/plus_symbol.svg";
+import pencil from "../images/pencil.svg";
+import logo from "../images/logo.svg";
+
 const initialCards = [
   {
     name: "Val Thorens",
@@ -30,6 +43,18 @@ const initialCards = [
   },
 ];
 
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: "a1788072-f30e-44d7-94b0-8722137d993e",
+    "Content-Type": "application/json",
+  },
+});
+
+api.getInitialCards().then((data) => {
+  console.log(data);
+});
+
 const editModal = document.querySelector("#edit-profile-modal");
 const profileFormElement = editModal.querySelector(".modal__form");
 const editButton = document.querySelector(".profile__edit-button");
@@ -59,6 +84,18 @@ const editModalDescriptionInput = document.querySelector(
 
 const cardTemplate = document.querySelector("#card-template");
 const cardsList = document.querySelector(".cards__list");
+
+const profileImage = document.getElementById("profile-image");
+profileImage.src = avatar;
+
+const plusSymbol = document.getElementById("plus-symbol");
+plusSymbol.src = plus;
+
+const pencilLogo = document.getElementById("pencil");
+pencilLogo.src = pencil;
+
+const spotsLogo = document.getElementById("spots-logo");
+spotsLogo.src = logo;
 
 function getCardElement(data) {
   const cardElement = cardTemplate.content
@@ -168,3 +205,5 @@ initialCards.forEach((item) => {
   const cardElement = getCardElement(item);
   cardsList.append(cardElement);
 });
+
+enableValidation(settings);
