@@ -131,7 +131,7 @@ function getCardElement(data) {
   });
 
   cardDeleteButton.addEventListener("click", () => {
-    cardElement.remove();
+    openModal(deleteModal);
   });
 
   cardImageElement.addEventListener("click", () => {
