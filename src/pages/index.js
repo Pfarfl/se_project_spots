@@ -75,7 +75,10 @@ const editModalDescriptionInput = document.querySelector(
 const cardTemplate = document.querySelector("#card-template");
 const cardsList = document.querySelector(".cards__list");
 
+let selectedCard, selectedCardId;
+
 const deleteModal = document.querySelector("#delete-modal");
+const deleteForm = deleteModal.querySelector(".modal__form");
 
 const profileImage = document.getElementById("profile-image");
 
@@ -130,9 +133,9 @@ function getCardElement(data) {
     cardLikeButton.classList.toggle("card__like-button_liked");
   });
 
-  cardDeleteButton.addEventListener("click", () => {
-    openModal(deleteModal);
-  });
+  cardDeleteButton.addEventListener("click", (evt) =>
+    handleDeleteCard(cardElement, data._id)
+  );
 
   cardImageElement.addEventListener("click", () => {
     openModal(viewModal);
@@ -169,6 +172,23 @@ function handleEsc(evt) {
       closeModal(modal);
     }
   }
+}
+
+function handleDeleteSubmit(evt) {
+  evt.preventDefault();
+  api
+    .deleteCard(selectedCardId)
+    .then(() => {
+      selectedCard.remove();
+      closeModal(deleteModal);
+    })
+    .catch(console.error);
+}
+
+function handleDeleteCard(cardElement, cardId) {
+  selectedCard = cardElement;
+  selectedCardId = cardId;
+  openModal(deleteModal);
 }
 
 function handleProfileFormSubmit(evt) {
@@ -225,6 +245,8 @@ closeButtons.forEach((button) => {
 postButton.addEventListener("click", () => {
   openModal(postModal);
 });
+
+deleteForm.addEventListener("submit", handleDeleteSubmit);
 
 profileFormElement.addEventListener("submit", handleProfileFormSubmit);
 postForm.addEventListener("submit", handleAddPostSubmit);
