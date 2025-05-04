@@ -11,49 +11,39 @@ import plus from "../images/plus_symbol.svg";
 import pencil from "../images/pencil.svg";
 import logo from "../images/logo.svg";
 
-const initialCards = [
-  {
-    name: "Val Thorens",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg",
-  },
+import Api from "../utils/Api.js";
 
-  {
-    name: "Restaurant terrace",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg",
-  },
+// const initialCards = [
+//   {
+//     name: "Val Thorens",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg",
+//   },
 
-  {
-    name: "An outdoor cafe",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg",
-  },
+//   {
+//     name: "Restaurant terrace",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg",
+//   },
 
-  {
-    name: "A very long bridge, over the forest and through the trees",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg",
-  },
+//   {
+//     name: "An outdoor cafe",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg",
+//   },
 
-  {
-    name: "Tunnel with morning light",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg",
-  },
+//   {
+//     name: "A very long bridge, over the forest and through the trees",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg",
+//   },
 
-  {
-    name: "Mountain house",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg",
-  },
-];
+//   {
+//     name: "Tunnel with morning light",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg",
+//   },
 
-const api = new Api({
-  baseUrl: "https://around-api.en.tripleten-services.com/v1",
-  headers: {
-    authorization: "a1788072-f30e-44d7-94b0-8722137d993e",
-    "Content-Type": "application/json",
-  },
-});
-
-api.getInitialCards().then((data) => {
-  console.log(data);
-});
+//   {
+//     name: "Mountain house",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg",
+//   },
+// ];
 
 const editModal = document.querySelector("#edit-profile-modal");
 const profileFormElement = editModal.querySelector(".modal__form");
@@ -85,8 +75,9 @@ const editModalDescriptionInput = document.querySelector(
 const cardTemplate = document.querySelector("#card-template");
 const cardsList = document.querySelector(".cards__list");
 
+const deleteModal = document.querySelector("#delete-modal");
+
 const profileImage = document.getElementById("profile-image");
-profileImage.src = avatar;
 
 const plusSymbol = document.getElementById("plus-symbol");
 plusSymbol.src = plus;
@@ -96,6 +87,30 @@ pencilLogo.src = pencil;
 
 const spotsLogo = document.getElementById("spots-logo");
 spotsLogo.src = logo;
+
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: "a1788072-f30e-44d7-94b0-8722137d993e",
+    "Content-Type": "application/json",
+  },
+});
+
+api
+  .getAppInfo()
+  .then(([cards, user]) => {
+    cards.forEach((item) => {
+      const cardElement = getCardElement(item);
+      cardsList.append(cardElement);
+    });
+
+    profileImage.src = user.avatar;
+    profileDescription.textContent = user.about;
+    profileName.textContent = user.name;
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 function getCardElement(data) {
   const cardElement = cardTemplate.content
@@ -158,22 +173,35 @@ function handleEsc(evt) {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault(editModal);
-  profileName.textContent = editModalNameInput.value;
-  profileDescription.textContent = editModalDescriptionInput.value;
-  closeModal(editModal);
+  api
+    .editUserInfo({
+      name: editModalNameInput.value,
+      about: editModalDescriptionInput.value,
+    })
+    .then((data) => {
+      profileName.textContent = data.name;
+      profileDescription.textContent = data.about;
+      closeModal(editModal);
+    })
+    .catch(console.error);
 }
 
 function handleAddPostSubmit(evt) {
   evt.preventDefault();
-  const inputValues = {
-    name: postCaptionInput.value,
-    link: postLinkInput.value,
-  };
-  const cardElement = getCardElement(inputValues);
-  cardsList.prepend(cardElement);
-  closeModal(postModal);
-  disableButton(postSubmitButton, settings);
-  evt.target.reset();
+  api
+    .addNewCard({ name: postCaptionInput.value, link: postLinkInput.value })
+    .then(() => {
+      const inputValues = {
+        name: postCaptionInput.value,
+        link: postLinkInput.value,
+      };
+      const cardElement = getCardElement(inputValues);
+      cardsList.append(cardElement);
+      closeModal(postModal);
+      disableButton(postSubmitButton, settings);
+      evt.target.reset();
+    })
+    .catch(console.error);
 }
 
 editButton.addEventListener("click", () => {
@@ -200,10 +228,5 @@ postButton.addEventListener("click", () => {
 
 profileFormElement.addEventListener("submit", handleProfileFormSubmit);
 postForm.addEventListener("submit", handleAddPostSubmit);
-
-initialCards.forEach((item) => {
-  const cardElement = getCardElement(item);
-  cardsList.append(cardElement);
-});
 
 enableValidation(settings);
