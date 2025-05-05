@@ -10,40 +10,9 @@ import avatar from "../images/avatar.jpg";
 import plus from "../images/plus_symbol.svg";
 import pencil from "../images/pencil.svg";
 import logo from "../images/logo.svg";
+import whitePencil from "../images/white_pencil.svg";
 
 import Api from "../utils/Api.js";
-
-// const initialCards = [
-//   {
-//     name: "Val Thorens",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg",
-//   },
-
-//   {
-//     name: "Restaurant terrace",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg",
-//   },
-
-//   {
-//     name: "An outdoor cafe",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg",
-//   },
-
-//   {
-//     name: "A very long bridge, over the forest and through the trees",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg",
-//   },
-
-//   {
-//     name: "Tunnel with morning light",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg",
-//   },
-
-//   {
-//     name: "Mountain house",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg",
-//   },
-// ];
 
 const editModal = document.querySelector("#edit-profile-modal");
 const profileFormElement = editModal.querySelector(".modal__form");
@@ -88,6 +57,9 @@ plusSymbol.src = plus;
 const pencilLogo = document.getElementById("pencil");
 pencilLogo.src = pencil;
 
+const whitePencilLogo = document.getElementById("white-pencil");
+whitePencilLogo.src = whitePencil;
+
 const spotsLogo = document.getElementById("spots-logo");
 spotsLogo.src = logo;
 
@@ -125,15 +97,17 @@ function getCardElement(data) {
   const cardLikeButton = cardElement.querySelector(".card__like-button");
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
 
+  if (data.isLiked) {
+    cardLikeButton.classList.add("card__like-button_liked");
+  }
+
   cardNameElement.textContent = data.name;
   cardImageElement.src = data.link;
   cardImageElement.alt = data.name;
 
-  cardLikeButton.addEventListener("click", () => {
-    cardLikeButton.classList.toggle("card__like-button_liked");
-  });
+  cardLikeButton.addEventListener("click", (evt) => handleLike(evt, data._id));
 
-  cardDeleteButton.addEventListener("click", (evt) =>
+  cardDeleteButton.addEventListener("click", () =>
     handleDeleteCard(cardElement, data._id)
   );
 
@@ -174,6 +148,18 @@ function handleEsc(evt) {
   }
 }
 
+function handleLike(evt, id) {
+  const isLiked = evt.target.classList.contains("card__like-button_liked")
+    ? true
+    : false;
+  api
+    .changeLikeStatus(id, isLiked)
+    .then(() => {
+      evt.target.classList.toggle("card__like-button_liked");
+    })
+    .catch(console.error);
+}
+
 function handleDeleteSubmit(evt) {
   evt.preventDefault();
   api
@@ -190,6 +176,8 @@ function handleDeleteCard(cardElement, cardId) {
   selectedCardId = cardId;
   openModal(deleteModal);
 }
+
+function handleEditAvatar() {}
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault(editModal);

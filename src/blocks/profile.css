@@ -5,10 +5,33 @@
 }
 
 .profile__avatar {
-  margin-right: 20px;
   border-radius: 8px;
   height: 190px;
   width: 190px;
+}
+
+.profile__avatar-container {
+  margin-right: 20px;
+  position: relative;
+}
+
+.profile__avatar-edit-button {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: translate(0, -100%);
+  display: flex;
+  justify-content: center;
+  column-gap: 8px;
+}
+
+.profile__edit-text {
+  transform: translate(0, 85%);
+}
+
+.profile__white-pencil {
+  height: 14px;
+  width: 14px;
 }
 
 .profile__column {

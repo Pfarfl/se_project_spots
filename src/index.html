@@ -19,11 +19,22 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <img
-            id="profile-image"
-            alt="Profile avatar photo"
-            class="profile__avatar"
-          />
+          <div class="profile__avatar-container">
+            <img
+              id="profile-image"
+              alt="Profile avatar photo"
+              class="profile__avatar"
+            />
+            <button class="profile__avatar-edit-button">
+              <span class="profile__edit-text">
+                <img
+                  id="white-pencil"
+                  alt="White pencil icon"
+                  class="profile__white-pencil"
+                />Edit Avatar</span
+              >
+            </button>
+          </div>
           <div class="profile__column">
             <h1 class="profile__name">Bessie Coleman</h1>
             <p class="profile__description">Civil Aviator</p>
@@ -169,6 +180,35 @@
             <button type="submit" class="modal__delete-button">Delete</button>
 
             <button type="button" class="modal__cancel-button">Cancel</button>
+          </form>
+        </div>
+      </div>
+      <div class="modal" id="edit-avatar-modal">
+        <div class="modal__container">
+          <button type="button" class="modal__close-button"></button>
+          <h2 class="modal__title">Edit profile avatar</h2>
+          <form
+            name="edit-avatar"
+            id="modal__avatar-form"
+            class="modal__form"
+            novalidate
+          >
+            <label for="avatar-input" class="modal__label">
+              Profile Picture
+              <input
+                id="avatar-input"
+                type="url"
+                class="modal__input"
+                placeholder="Paste the link to an image"
+                minlength="2"
+                required
+              />
+              <span
+                id="avatar-input-error"
+                class="modal__input-error avatar-input-error"
+              ></span>
+            </label>
+            <button type="submit" class="modal__submit-button">Save</button>
           </form>
         </div>
       </div>
