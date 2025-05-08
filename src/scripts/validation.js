@@ -31,7 +31,7 @@ const hasInvalidInput = (inputList) => {
   });
 };
 
-const toggleButtonState = (inputList, buttonEl, config) => {
+export const toggleButtonState = (inputList, buttonEl, config) => {
   if (inputList.length === 0) return;
 
   if (hasInvalidInput(inputList)) {

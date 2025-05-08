@@ -3,10 +3,11 @@ import {
   enableValidation,
   settings,
   disableButton,
+  toggleButtonState,
   resetValidation,
 } from "../scripts/validation.js";
 
-import avatar from "../images/avatar.jpg";
+//import avatar from "../images/avatar.jpg";
 import plus from "../images/plus_symbol.svg";
 import pencil from "../images/pencil.svg";
 import logo from "../images/logo.svg";
@@ -17,20 +18,17 @@ import Api from "../utils/Api.js";
 const editModal = document.querySelector("#edit-profile-modal");
 const profileFormElement = editModal.querySelector(".modal__form");
 const editButton = document.querySelector(".profile__edit-button");
-const editCloseButton = document.querySelector(".modal__close-button");
 
 const postModal = document.querySelector("#add-post-modal");
 const postForm = postModal.querySelector(".modal__form");
 const postSubmitButton = postModal.querySelector(".modal__submit-button");
 const postButton = document.querySelector(".profile__post-button");
-const postCloseButton = postModal.querySelector(".modal__close-button");
 const postLinkInput = postModal.querySelector("#post-link-input");
 const postCaptionInput = postModal.querySelector("#post-caption-input");
 
 const viewModal = document.querySelector("#view-modal");
 const viewModalImage = viewModal.querySelector(".modal__image");
 const viewModalCaption = viewModal.querySelector(".modal__caption");
-const viewModalCloseButton = viewModal.querySelector(".modal__close-button");
 
 const closeButtons = document.querySelectorAll(".modal__close-button");
 
@@ -48,6 +46,11 @@ let selectedCard, selectedCardId;
 
 const deleteModal = document.querySelector("#delete-modal");
 const deleteForm = deleteModal.querySelector(".modal__form");
+
+const avatarModal = document.querySelector("#edit-avatar-modal");
+const avatarForm = avatarModal.querySelector(".modal__form");
+const avatarButton = document.querySelector(".profile__avatar-edit-button");
+const avatarInput = document.querySelector("#avatar-input");
 
 const profileImage = document.getElementById("profile-image");
 
@@ -152,23 +155,33 @@ function handleLike(evt, id) {
   const isLiked = evt.target.classList.contains("card__like-button_liked")
     ? true
     : false;
+  const submitBtn = evt.submitter;
+  submitBtn.textContent = "Saving...";
   api
     .changeLikeStatus(id, isLiked)
     .then(() => {
       evt.target.classList.toggle("card__like-button_liked");
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      submitBtn.textContent = "Save";
+    });
 }
 
 function handleDeleteSubmit(evt) {
   evt.preventDefault();
+  const submitBtn = evt.submitter;
+  submitBtn.textContent = "Deleting...";
   api
     .deleteCard(selectedCardId)
     .then(() => {
       selectedCard.remove();
       closeModal(deleteModal);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      submitBtn.textContent = "Delete";
+    });
 }
 
 function handleDeleteCard(cardElement, cardId) {
@@ -177,10 +190,26 @@ function handleDeleteCard(cardElement, cardId) {
   openModal(deleteModal);
 }
 
-function handleEditAvatar() {}
+function handleAvatarSubmit(evt) {
+  evt.preventDefault();
+  const submitBtn = evt.submitter;
+  submitBtn.textContent = "Saving...";
+  api
+    .editAvatar(avatarInput.value)
+    .then((data) => {
+      profileImage.src = data.avatar;
+      closeModal(avatarModal);
+    })
+    .catch(console.error)
+    .finally(() => {
+      submitBtn.textContent = "Save";
+    });
+}
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault(editModal);
+  const submitBtn = evt.submitter;
+  submitBtn.textContent = "Saving...";
   api
     .editUserInfo({
       name: editModalNameInput.value,
@@ -191,11 +220,16 @@ function handleProfileFormSubmit(evt) {
       profileDescription.textContent = data.about;
       closeModal(editModal);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      submitBtn.textContent = "Save";
+    });
 }
 
 function handleAddPostSubmit(evt) {
   evt.preventDefault();
+  const submitBtn = evt.submitter;
+  submitBtn.textContent = "Saving...";
   api
     .addNewCard({ name: postCaptionInput.value, link: postLinkInput.value })
     .then(() => {
@@ -209,7 +243,10 @@ function handleAddPostSubmit(evt) {
       disableButton(postSubmitButton, settings);
       evt.target.reset();
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      submitBtn.textContent = "Save";
+    });
 }
 
 editButton.addEventListener("click", () => {
@@ -234,9 +271,15 @@ postButton.addEventListener("click", () => {
   openModal(postModal);
 });
 
+avatarButton.addEventListener("click", () => {
+  openModal(avatarModal);
+});
+
 deleteForm.addEventListener("submit", handleDeleteSubmit);
 
 profileFormElement.addEventListener("submit", handleProfileFormSubmit);
 postForm.addEventListener("submit", handleAddPostSubmit);
+
+avatarForm.addEventListener("submit", handleAvatarSubmit);
 
 enableValidation(settings);
