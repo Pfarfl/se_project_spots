@@ -31,7 +31,9 @@ const hasInvalidInput = (inputList) => {
   });
 };
 
-const toggleButtonState = (inputList, buttonEl, config) => {
+export const toggleButtonState = (inputList, buttonEl, config) => {
+  if (inputList.length === 0) return;
+
   if (hasInvalidInput(inputList)) {
     disableButton(buttonEl, config);
   } else {
@@ -58,7 +60,7 @@ const setEventListeners = (formEl, config) => {
   toggleButtonState(inputList, buttonEl, config);
 
   inputList.forEach((inputEl) => {
-    inputEl.addEventListener("input", function (config) {
+    inputEl.addEventListener("input", () => {
       checkInputValidity(formEl, inputEl, config);
       toggleButtonState(inputList, buttonEl, config);
     });
