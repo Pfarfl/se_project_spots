@@ -46,6 +46,7 @@ let selectedCard, selectedCardId;
 
 const deleteModal = document.querySelector("#delete-modal");
 const deleteForm = deleteModal.querySelector(".modal__form");
+const deleteCancel = document.querySelector(".modal__cancel-button");
 
 const avatarModal = document.querySelector("#edit-avatar-modal");
 const avatarForm = avatarModal.querySelector(".modal__form");
@@ -155,17 +156,12 @@ function handleLike(evt, id) {
   const isLiked = evt.target.classList.contains("card__like-button_liked")
     ? true
     : false;
-  const submitBtn = evt.submitter;
-  submitBtn.textContent = "Saving...";
   api
     .changeLikeStatus(id, isLiked)
     .then(() => {
       evt.target.classList.toggle("card__like-button_liked");
     })
-    .catch(console.error)
-    .finally(() => {
-      submitBtn.textContent = "Save";
-    });
+    .catch(console.error);
 }
 
 function handleDeleteSubmit(evt) {
@@ -232,13 +228,13 @@ function handleAddPostSubmit(evt) {
   submitBtn.textContent = "Saving...";
   api
     .addNewCard({ name: postCaptionInput.value, link: postLinkInput.value })
-    .then(() => {
-      const inputValues = {
-        name: postCaptionInput.value,
-        link: postLinkInput.value,
-      };
-      const cardElement = getCardElement(inputValues);
-      cardsList.append(cardElement);
+    .then((cardData) => {
+      // const inputValues = {
+      //   name: postCaptionInput.value,
+      //   link: postLinkInput.value,
+      // };
+      const cardElement = getCardElement(cardData);
+      cardsList.prepend(cardElement);
       closeModal(postModal);
       disableButton(postSubmitButton, settings);
       evt.target.reset();
@@ -273,6 +269,10 @@ postButton.addEventListener("click", () => {
 
 avatarButton.addEventListener("click", () => {
   openModal(avatarModal);
+});
+
+deleteCancel.addEventListener("click", () => {
+  closeModal(deleteModal);
 });
 
 deleteForm.addEventListener("submit", handleDeleteSubmit);
